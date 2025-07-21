@@ -65,7 +65,8 @@ public class HMS {
         String fn="Hospital_Data.txt";
         Deque<Patient1> queue=new ArrayDeque<>();
         List<Patient1> all_pt=new ArrayList<>();
-        while(true){
+        boolean b=true;
+        while(b){
             System.out.println("____Hospital Management System____");
             System.out.println("1. Add an Emergency Patient");
             System.out.println("2. Add an Normal Patient");
@@ -137,6 +138,8 @@ break;
                     }catch (IOException e){
                         System.out.println("Error::"+e.getMessage());
                     }
+                    b=false;
+
                     break;
 
 
