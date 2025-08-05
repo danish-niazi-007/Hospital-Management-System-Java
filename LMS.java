@@ -1,169 +1,201 @@
-import org.w3c.dom.ls.LSOutput;
-
-import java.sql.SQLOutput;
-import java.util.*;
 import java.io.*;
+import java.util.*;
+interface Report{
+    void display_rep();
+}
+abstract class user {
+    protected int age;
+    protected String name;
 
-interface report{
-    void report_g();
+    user(int age, String name) {
+        this.age = age;
+        this.name = name;
+
+    }
+
+    abstract void display_detail();
+
 
 }
-abstract class User{
-    protected String name;
-    protected int age;
+class Vistors extends user implements Report{
+
     protected int id;
-    User(String name,int age,int id){
-        this.name=name;
-        this.age=age;
+    Vistors(int age,String name, int id){
+        super(age, name);
         this.id=id;
     }
-     abstract void diplay_detail();
-}
-class Vistor extends User implements report{
-    private String interested_book;
-Vistor(String name,int age,int id,String interested_book){
-        super(name, age, id);
-        this.interested_book=interested_book;}
-    String getInterested_book(){
-        return interested_book;
+
+    @Override
+    void display_detail() {
+        System.out.println("|ID ::"+id+"| |Name ::"+name+"| |Age ::"+age+"|");
     }
 
     @Override
-    void diplay_detail() {
-        System.out.println("[Vistor]:: "+name+" [ID]:: "+id+" Interested In"+interested_book);
-    }
+    public void display_rep() {
+        System.out.println("The Report is Generating For......");
 
-    @Override
-    public void report_g() {
-        System.out.println("The Report is Generating for ::\n");
-        diplay_detail();
-
+        display_detail();
     }
 }
 class Book{
-     String title;
-    String author;
-     int bid;
-
-    Queue<Vistor> queue=new ArrayDeque<>();
-    Book(String title,String author,int bid){
+    Queue<Vistors> queue=new ArrayDeque<>();
+    protected  int b_id ;
+    protected  String author;
+    protected String b_n;
+    Book(int b_id,String b_n,String author){
+        this.b_id=b_id;
+        this.b_n=b_n;
         this.author=author;
-        this.title=title;
-        this.bid=bid;
-
     }
     void display_detail(){
-        System.out.println(" Book ID::"+bid+" Book Name:: "+title+" Author Name:: "+author);
+        System.out.println("ID ::"+b_id+" Book Name ::"+b_n+" Auhtor ::"+author);
     }
-
 }
-
-
-
-
+// Half Program Ended
 public class LMS {
     public static void main( String[] args){
-List<Book> books=new ArrayList<>();
-List<Vistor> vistors=new ArrayList<>();
-Scanner sc=new Scanner(System.in);
+        Scanner scanner=new Scanner(System.in);
+        List<Vistors> vistors=new ArrayList<>();
+        List<Book> books= new ArrayList<>();
 
-while(true){
-        System.out.println("1. Add a book");
-        System.out.println("2. Add a vistor");
-        System.out.println("3. Add Borrow Request ");
-        System.out.println("4. Serve a Request ");
-        System.out.println("5. View All Book");
-        System.out.println("6. View All Vistor");
-        System.out.println("7. Save And Exit");
-        int choice =sc.nextInt();
-        sc.nextLine();
-        switch (choice){
-            case 1:
-            {
-                System.out.println("Enter Book Id ::");
-                int bd= sc.nextInt();
-                sc.nextLine();
-                System.out.println("Enter Book Name ::");
-                String bname=sc.nextLine();
-                System.out.println("Enter book Author ::");
-                String author=sc.nextLine();
-                books.add(new Book(bname,author,bd));
-                System.out.println("__Book Added Successfully__");
-                break;
-            }
-            case 2:
-            {
-                System.out.println("Enter Vistor Name :");
-                String name=sc.nextLine();
-                System.out.println("Enter age ::");
-                int age=sc.nextInt();
-                sc.nextLine();
-                System.out.println("Enter id ::");
-                int id= sc.nextInt();
-                sc.nextLine();
-                System.out.println("Enter Interested Book::");
-                String interest=sc.nextLine();
-                vistors.add(new Vistor(name,age,id,interest));
-                System.out.println("__Vistor Added Succesfully__");
-                break;
-            }
-            case 3:
-            {
-                System.out.println(" Enter your Id ::");
-                int bid=sc.nextInt();
-                sc.nextLine();
-                System.out.println("Enter  A book name ::");
-                String bbn=sc.nextLine();
-                Vistor br=null;
-                for(Vistor v:vistors){
-                    if (v.id==bid){
-                        br=v;
-                        break;
+        boolean exit=false;
+        while(!exit){
+            System.out.println("1. Add a book");
+            System.out.println("2. Add a Vistor");
+            System.out.println("3. Add a Request");
+            System.out.println("4. Serve a Request");
+            System.out.println("5. Exit");
+            int choice=scanner.nextInt();
+            scanner.nextLine();
+            switch (choice){
+                case 1:
+                {System.out.println("Enter a Book Name");
+                    String bookname=scanner.nextLine();
+                    System.out.println("Enter Book ID");
+                    int bookid=scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Enter a Author a Name");
+                    String authorname=scanner.nextLine();
+                    Book b=new Book(bookid,bookname,authorname);
+                    books.add(b);
+                    break;}
+                case 2:
+                {
+                    System.out.println("Enter The Name of the Vistor");
+                    String name=scanner.nextLine();
+                    System.out.println("Enter Id of the Vistor");
+                    int id =scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Enter Age of the Vistor");
+                    int age =scanner.nextInt();
+                    scanner.nextLine();
+                    Vistors vistors1=new Vistors(age,name,id);
+                    vistors.add(vistors1);
+                    break;
+
+
+                }
+                case 3:{
+                    System.out.println("Enter your ID Please.......");
+                    int id=scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println(" Checking your Authorization....");
+                    Vistors cv=null;
+                    for(Vistors v: vistors){
+                        if(v.id==id){
+                            cv=v;
+                            System.out.println("Thanks For Patience");
+                            break;
+                        }
                     }
-                }
-                  if(br==null){
-                      System.out.println("User not found");}
-                      for(Book b:books){
-                          if(b.title.equalsIgnoreCase(bbn)){
+                    if(cv==null){
+                        System.out.println("You are Unauthorized....");
+                        System.out.println("PLease Register First");
+                    }
+                    System.out.println("Enter Book ID...");
+                    int id1=scanner.nextInt();
+                    scanner.nextLine();
+                    Book b1=null;
+                    for(Book b:books){
+                        if(b.b_id==id1){
+                            b.queue.add(cv);
+                            b1=b;
+                            break;
 
-                              b.queue.add(br);
-                              System.out.println("Added Request:::");
-                              break;
-                      }
-                      }
-                      break;
-                  }
-                  case 4:{
-                      for(Book b: books){
-
-                          if (!b.queue.isEmpty()){
-
-                              Vistor v=b.queue.poll();
-                              System.out.println("Vistor ID ::"+v.id+" Book Title is ::"+b.title);
-                      break;}
-                      }
-break;}
-            case 5:{
-                System.out.println("__ Book List __");
-                for(Book b:books){
-                    b.display_detail();
-
+                        }
+                    }
+                    if(b1==null){
+                        System.out.println("Book Not Found...");
+                    }
+                    else{
+                        System.out.println("Book Added Successfully");
+                    }
+                    break;
 
                 }
-                break;
+                case 4:{
+                    Book selectedbook=null;
+                    System.out.println("Serving a Request.....");
+                    for(Book b:books){
+                        System.out.println("Book ID ::"+b.b_id+" Book Name "+b.b_n+" Author Name "+b.author+" Requests["+b.queue.size()+"]");
+
+                    }
+                    System.out.println("Enter Book ID you want to serve....");
+                    int id2=scanner.nextInt();
+                    scanner.nextLine();
+                    for(Book b:books){
+                        if(b.b_id==id2){
+                            selectedbook=b;
+
+                            break;
+                        }
+                    }
+                    if (selectedbook==null){
+                        System.out.println("Book Not Found...");
+                    }
+                    else if(selectedbook.queue.isEmpty()){
+                        System.out.println("Book Request is Empty");
+                    }
+                    else{
+                        Vistors v=selectedbook.queue.poll();
+                        System.out.println("Request is Served");
+                        System.out.println("Vistor ID "+v.id+" Vistor Name "+v.name+" Book name "+selectedbook.b_n+" Book ID "+selectedbook.b_id);
+                    }
+                    break;
+                }
+
+
+
+
+
+
+
+                case 5:{
+                    exit=true;
+                    System.out.println("Thanks...");
+                    break;
+                }
+                default:
+                    System.out.println("Invalid Choice....");
+
+
+
+
+
+
             }
-            case 6:{
 
 
-                System.out.println("__ Vistor List __");
-                for(Vistor v:vistors){
 
-                    v.diplay_detail();
-                }
-                break;
-            }
-            default:
-                System.out.println("Invalid Choice");
+
+
+
+
+
+
+
+
+
 
 
 
@@ -173,8 +205,13 @@ break;}
 
 
 
-        }}
+
+
 
     }
 
 
+
+
+
+}
